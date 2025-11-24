@@ -9,21 +9,22 @@ Capture live network packets using Wireshark and identify basic protocols and tr
 
 ## Steps Performed
 1. Installed Wireshark and selected the active network interface.
-2. Started packet capture and generated traffic by browsing a website and pinging a server.
-3. Stopped capture after ~1 minute.
-4. Applied filters (`tcp`, `http`, `dns`, `tls`, `udp`) to isolate protocols.
-5. Exported capture as `.pcap`.
+2. Started packet capture and generated traffic by browsing websites and using ping commands.
+3. Stopped capture after approximately one minute.
+4. Applied filters (`tcp`, `dns`, `tls`, `udp`, `icmp`, `quic`) to isolate protocols.
+5. Exported the capture as `.pcap`.
 6. Documented findings with screenshots and protocol summary.
 
 ---
 
 ## Protocols Identified
-- **TCP**: Reliable transport protocol used for HTTP and TLS handshakes.
-- **HTTP**: Unencrypted web traffic (GET requests and responses).
+
+- **TCP**: Reliable transport protocol used for TLS handshakes and general data transfer.
 - **DNS**: Domain name resolution queries.
-- **TLSv1.2**: Secure handshake for HTTPS connections.
+- **TLSv1.2**: Secure handshake for encrypted HTTPS connections.
 - **QUIC**: Modern transport protocol over UDP, used by Google services.
 - **UDP**: Lightweight transport protocol used by DNS and QUIC.
+- **ICMP**: Echo request and reply packets used for connectivity testing (ping).
 
 ---
 
@@ -31,39 +32,51 @@ Capture live network packets using Wireshark and identify basic protocols and tr
 
 | Protocol   | Purpose                          | Example Packet Info                                      | Notes                                      |
 |------------|----------------------------------|-----------------------------------------------------------|--------------------------------------------|
-| TCP        | Reliable transport layer         | SYN, SYN-ACK, ACK between 192.168.0.48 and 192.168.0.1    | Used for HTTP and TLS handshakes           |
-| HTTP       | Web traffic (unencrypted)        | GET / HTTP/1.1 → 200 OK                                   | Shows basic browsing activity              |
-| DNS        | Domain name resolution           | Query for example.com to 8.8.8.8                          | Uses UDP, resolves hostnames               |
+| TCP        | Reliable transport layer         | SYN, SYN-ACK, ACK between 192.168.0.48 and 192.168.0.1    | Used for TLS handshakes and data transfer  |
+| DNS        | Domain name resolution           | Query for accounts.google.com to 8.8.8.8                  | Uses UDP, resolves hostnames               |
 | TLSv1.2    | Secure connection setup          | Client Hello, Server Certificate                          | Encrypts HTTPS traffic                     |
 | QUIC       | Modern transport over UDP        | Initial QUIC packet to Google IP                         | Faster, secure alternative to TCP+TLS      |
 | UDP        | Lightweight transport layer      | DNS and QUIC packets                                     | No handshake, used for speed               |
+| ICMP       | Connectivity testing             | Echo request/reply between 192.168.43.254 and 192.168.43.1 | Used for ping diagnostics                  |
 
 ---
 
 ## Sample Packet Details
+
 - **TCP Handshake**:
   - SYN from 192.168.0.48 → 192.168.0.1 (port 80)
   - SYN-ACK from 192.168.0.1 → 192.168.0.48
   - ACK from 192.168.0.48 → 192.168.0.1
-- **HTTP Request**:
-  - `GET / HTTP/1.1` from client
-  - Response: `HTTP/1.1 200 OK (text/html)`
+
 - **DNS Query**:
-  - Query for `example.com` sent to 8.8.8.8
+  - Query for `accounts.google.com` sent to 8.8.8.8
+
 - **TLS Handshake**:
   - Client Hello and Server Certificate exchange
+
 - **QUIC Traffic**:
   - UDP packets to Google IP (142.250.x.x) with QUIC stream data
+
+- **ICMP Ping**:
+  - Echo request from 192.168.43.254 → 192.168.43.1
+  - Echo reply from 192.168.43.1 → 192.168.43.254
 
 ---
 
 ## Screenshots
-- `screenshots/handshake-http.png`: TCP three-way handshake and HTTP GET/200 OK.
-- `screenshots/multi-protocol-capture.png`: Mixed traffic including TCP, UDP, DNS, TLS, and QUIC.
+
+- `screenshots/tcp-handshake.png`: TCP three-way handshake.
+- `screenshots/dns-query.png`: DNS query and response for Google domains.
+- `screenshots/tls-handshake.png`: TLSv1.2 handshake with certificate exchange.
+- `screenshots/quic-traffic.png`: QUIC packets over UDP to Google IP.
+- `screenshots/udp-traffic.png`: UDP segment details.
+- `screenshots/icmp-ping.png`: ICMP Echo request and reply.
+- `screenshots/multi-protocol-view.png`: Overview showing multiple protocols in one capture.
 
 ---
 
 ## Deliverables
+
 - `capture.pcap`: Raw packet capture file.
 - `report.md`: This analysis report.
 - `screenshots/`: Supporting visuals.
@@ -71,4 +84,5 @@ Capture live network packets using Wireshark and identify basic protocols and tr
 ---
 
 ## Conclusion
-This lab demonstrates how Wireshark can be used to capture and analyze real-world traffic. The capture shows both encrypted (TLS, QUIC) and unencrypted (HTTP, DNS) protocols, highlighting the diversity of modern network communication. This structured analysis is useful for interview preparation, portfolio documentation, and hands-on learning in IT security and system administration.
+
+This lab demonstrates how Wireshark can be used to capture and analyze real-world network traffic. The capture includes encrypted protocols (TLS, QUIC), diagnostic traffic (ICMP), and foundational services (DNS, TCP), showcasing the diversity of modern communication. The structured documentation and visuals make this lab ideal for interview preparation, portfolio presentation, and hands-on learning in IT security and system administration.
